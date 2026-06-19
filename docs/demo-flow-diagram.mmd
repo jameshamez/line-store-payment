@@ -1,0 +1,41 @@
+flowchart LR
+  subgraph customer["Customer / LINE MINI APP"]
+    A["Scan table QR"]
+    B["Open Mini App with shopId + tableId"]
+    C["Select menu items"]
+    D["Submit order"]
+    E["View QR Payment / Order Summary"]
+  end
+
+  subgraph system["Next.js Demo System"]
+    F["Create order"]
+    G["Calculate total amount"]
+    H["Generate PromptPay QR Code"]
+    I["Store order and payment status"]
+    J["Send payment notification request"]
+  end
+
+  subgraph line["LINE"]
+    K["Push payment notification"]
+  end
+
+  subgraph restaurant["Restaurant / Staff"]
+    L["Open Dashboard"]
+    M["See shop + table + total"]
+    N["Check LINE notification status"]
+    O["Mark order as paid"]
+  end
+
+  subgraph admin["Demo Admin Pages"]
+    P["Table QR Management"]
+    Q["Menu / Store Management"]
+  end
+
+  A --> B --> C --> D
+  D --> F --> G --> H --> I
+  I --> E
+  I --> J --> K
+  L --> M --> N --> O
+  I --> L
+  P --> A
+  Q --> B

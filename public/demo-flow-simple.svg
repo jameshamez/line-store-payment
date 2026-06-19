@@ -1,0 +1,123 @@
+<svg width="1400" height="1900" viewBox="0 0 1400 1900" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="green" x1="80" y1="70" x2="1320" y2="330" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#06C755"/>
+      <stop offset="1" stop-color="#048D3E"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="12" stdDeviation="14" flood-color="#16201C" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      .title { font: 900 54px Arial, sans-serif; fill: #ffffff; }
+      .subtitle { font: 400 28px Arial, sans-serif; fill: rgba(255,255,255,0.9); }
+      .section { font: 900 30px Arial, sans-serif; fill: #16201C; }
+      .step-title { font: 900 34px Arial, sans-serif; fill: #16201C; }
+      .step-body { font: 400 25px Arial, sans-serif; fill: #65716B; }
+      .small { font: 800 21px Arial, sans-serif; fill: #65716B; }
+      .num { font: 900 34px Arial, sans-serif; fill: #ffffff; }
+      .card-title { font: 900 25px Arial, sans-serif; fill: #16201C; }
+      .card-body { font: 400 21px Arial, sans-serif; fill: #65716B; }
+      .note-title { font: 900 26px Arial, sans-serif; fill: #24513A; }
+      .note { font: 400 23px Arial, sans-serif; fill: #2F4B42; }
+    </style>
+  </defs>
+
+  <rect width="1400" height="1900" fill="#F4F7F4"/>
+
+  <rect x="70" y="60" width="1260" height="250" rx="28" fill="url(#green)" filter="url(#shadow)"/>
+  <text x="120" y="150" class="title">Flow ระบบสั่งอาหารผ่าน LINE MINI APP</text>
+  <text x="122" y="205" class="subtitle">ภาพรวม Demo: ลูกค้าสแกน QR ที่โต๊ะ → สั่งอาหาร → ได้ QR ชำระเงิน → ร้านเห็นยอดบน Dashboard</text>
+  <rect x="120" y="238" width="370" height="44" rx="22" fill="rgba(255,255,255,0.16)" stroke="rgba(255,255,255,0.28)"/>
+  <text x="145" y="268" font-family="Arial, sans-serif" font-size="22" font-weight="900" fill="#ffffff">เหมาะสำหรับส่งให้ลูกค้าดู</text>
+
+  <text x="115" y="395" class="section">Flow หลักที่ลูกค้าจะเห็น</text>
+
+  <g filter="url(#shadow)">
+    <rect x="110" y="440" width="830" height="165" rx="24" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <circle cx="180" cy="522" r="42" fill="#06C755"/>
+    <text x="160" y="534" class="num">1</text>
+    <text x="250" y="505" class="step-title">ลูกค้าสแกน QR ที่โต๊ะ</text>
+    <text x="252" y="548" class="step-body">เช่น โต๊ะ A1, A2, B1 หรือ VIP</text>
+
+    <rect x="110" y="690" width="830" height="165" rx="24" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <circle cx="180" cy="772" r="42" fill="#20A7A0"/>
+    <text x="160" y="784" class="num">2</text>
+    <text x="250" y="755" class="step-title">เปิดหน้า Mini App อัตโนมัติ</text>
+    <text x="252" y="798" class="step-body">ระบบรู้ทันทีว่าเป็นร้านไหน และโต๊ะไหน</text>
+
+    <rect x="110" y="940" width="830" height="165" rx="24" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <circle cx="180" cy="1022" r="42" fill="#FF704D"/>
+    <text x="160" y="1034" class="num">3</text>
+    <text x="250" y="1005" class="step-title">ลูกค้าเลือกเมนูและจำนวน</text>
+    <text x="252" y="1048" class="step-body">ระบบรวมยอดอาหารให้อัตโนมัติ</text>
+
+    <rect x="110" y="1190" width="830" height="165" rx="24" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <circle cx="180" cy="1272" r="42" fill="#F5B83F"/>
+    <text x="160" y="1284" class="num">4</text>
+    <text x="250" y="1255" class="step-title">ระบบสร้าง QR ชำระเงิน</text>
+    <text x="252" y="1298" class="step-body">มีสรุปออเดอร์ ยอดรวม ร้าน และโต๊ะ</text>
+
+    <rect x="110" y="1440" width="830" height="165" rx="24" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <circle cx="180" cy="1522" r="42" fill="#7B61FF"/>
+    <text x="160" y="1534" class="num">5</text>
+    <text x="250" y="1505" class="step-title">แจ้งเตือนยอดผ่าน LINE</text>
+    <text x="252" y="1548" class="step-body">ร้านรู้ว่าโต๊ะไหนต้องชำระเงินยอดเท่าไร</text>
+
+    <rect x="110" y="1690" width="830" height="165" rx="24" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <circle cx="180" cy="1772" r="42" fill="#16201C"/>
+    <text x="160" y="1784" class="num">6</text>
+    <text x="250" y="1755" class="step-title">ร้านดู Dashboard และปิดยอด</text>
+    <text x="252" y="1798" class="step-body">เห็นร้าน โต๊ะ ยอด สถานะ LINE และกดชำระแล้ว</text>
+  </g>
+
+  <path d="M525 610V672" stroke="#06C755" stroke-width="8" stroke-linecap="round"/>
+  <path d="M500 652L525 680L550 652" stroke="#06C755" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M525 860V922" stroke="#06C755" stroke-width="8" stroke-linecap="round"/>
+  <path d="M500 902L525 930L550 902" stroke="#06C755" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M525 1110V1172" stroke="#06C755" stroke-width="8" stroke-linecap="round"/>
+  <path d="M500 1152L525 1180L550 1152" stroke="#06C755" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M525 1360V1422" stroke="#06C755" stroke-width="8" stroke-linecap="round"/>
+  <path d="M500 1402L525 1430L550 1402" stroke="#06C755" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M525 1610V1672" stroke="#06C755" stroke-width="8" stroke-linecap="round"/>
+  <path d="M500 1652L525 1680L550 1652" stroke="#06C755" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <text x="1000" y="395" class="section">หน้าที่ใช้ใน Demo</text>
+
+  <g filter="url(#shadow)">
+    <rect x="995" y="440" width="300" height="122" rx="20" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <text x="1025" y="488" class="card-title">Demo Guide</text>
+    <text x="1025" y="522" class="card-body">หน้าเริ่มต้นสำหรับพาลูกค้าดู</text>
+
+    <rect x="995" y="590" width="300" height="122" rx="20" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <text x="1025" y="638" class="card-title">Mini App ลูกค้า</text>
+    <text x="1025" y="672" class="card-body">หน้าเลือกเมนูและส่งออเดอร์</text>
+
+    <rect x="995" y="740" width="300" height="122" rx="20" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <text x="1025" y="788" class="card-title">QR Payment</text>
+    <text x="1025" y="822" class="card-body">หน้าสรุปยอดและ QR ชำระเงิน</text>
+
+    <rect x="995" y="890" width="300" height="122" rx="20" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <text x="1025" y="938" class="card-title">Dashboard ร้าน</text>
+    <text x="1025" y="972" class="card-body">ดูยอดแยกตามร้านและโต๊ะ</text>
+
+    <rect x="995" y="1040" width="300" height="122" rx="20" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <text x="1025" y="1088" class="card-title">Table QR</text>
+    <text x="1025" y="1122" class="card-body">รวม QR Code ของแต่ละโต๊ะ</text>
+
+    <rect x="995" y="1190" width="300" height="122" rx="20" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <text x="1025" y="1238" class="card-title">Management</text>
+    <text x="1025" y="1272" class="card-body">แก้ร้าน โต๊ะ เมนู และราคา</text>
+  </g>
+
+  <path d="M940 522H982" stroke="#D7EBDC" stroke-width="5" stroke-linecap="round"/>
+  <path d="M940 772H982" stroke="#D7EBDC" stroke-width="5" stroke-linecap="round"/>
+  <path d="M940 1272H982" stroke="#D7EBDC" stroke-width="5" stroke-linecap="round"/>
+  <path d="M940 1772C1060 1772 1145 1440 1145 1322" stroke="#D7EBDC" stroke-width="5" stroke-linecap="round" stroke-dasharray="12 14"/>
+
+  <rect x="995" y="1460" width="300" height="250" rx="22" fill="#EEF7F1" stroke="#D7EBDC"/>
+  <text x="1025" y="1515" class="note-title">หมายเหตุ</text>
+  <text x="1025" y="1560" class="note">Demo นี้ใช้ดู Flow และหน้าตาระบบ</text>
+  <text x="1025" y="1596" class="note">ก่อนเชื่อม LINE OA, LIFF,</text>
+  <text x="1025" y="1632" class="note">database จริง และระบบยืนยัน</text>
+  <text x="1025" y="1668" class="note">การชำระเงินใน Production</text>
+</svg>

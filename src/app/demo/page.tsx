@@ -1,4 +1,4 @@
-import { ArrowRight, BellRing, LayoutDashboard, QrCode, Settings2, Smartphone, Store, WalletCards } from "lucide-react";
+import { ArrowRight, BellRing, Download, Image as ImageIcon, LayoutDashboard, QrCode, Settings2, Smartphone, Store, WalletCards } from "lucide-react";
 import Link from "next/link";
 import { readDb } from "@/lib/db";
 import { formatBaht } from "@/lib/money";
@@ -72,6 +72,22 @@ export default async function DemoPage() {
           </span>
           <ArrowRight size={18} />
         </Link>
+        <a className="demo-action" href="/demo-flow-simple.svg" target="_blank" rel="noreferrer">
+          <ImageIcon size={22} />
+          <span>
+            <strong>เปิด Flow Diagram</strong>
+            <small>ผังแบบอ่านง่ายสำหรับลูกค้า</small>
+          </span>
+          <ArrowRight size={18} />
+        </a>
+        <a className="demo-action" href="/demo-flow-simple.svg" download="line-mini-app-demo-flow-simple.svg">
+          <Download size={22} />
+          <span>
+            <strong>ดาวน์โหลด Diagram</strong>
+            <small>ใช้แนบ LINE หรืออีเมล</small>
+          </span>
+          <ArrowRight size={18} />
+        </a>
       </section>
 
       <section className="demo-pages">

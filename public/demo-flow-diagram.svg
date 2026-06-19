@@ -1,0 +1,129 @@
+<svg width="1800" height="1120" viewBox="0 0 1800 1120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" markerWidth="14" markerHeight="14" refX="12" refY="7" orient="auto" markerUnits="strokeWidth">
+      <path d="M2 2L12 7L2 12" fill="none" stroke="#06C755" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#16201C" flood-opacity="0.12"/>
+    </filter>
+    <style>
+      .title { font: 900 50px Arial, sans-serif; fill: #16201C; }
+      .subtitle { font: 400 24px Arial, sans-serif; fill: #65716B; }
+      .lane-title { font: 900 23px Arial, sans-serif; fill: #16201C; }
+      .node-title { font: 900 21px Arial, sans-serif; fill: #16201C; }
+      .node-body { font: 400 17px Arial, sans-serif; fill: #65716B; }
+      .note { font: 400 18px Arial, sans-serif; fill: #2F4B42; }
+      .note-strong { font: 900 20px Arial, sans-serif; fill: #24513A; }
+    </style>
+  </defs>
+
+  <rect width="1800" height="1120" fill="#F4F7F4"/>
+  <text x="70" y="78" class="title">Flow Diagram: LINE MINI APP Food Ordering Demo</text>
+  <text x="72" y="118" class="subtitle">ลูกค้าสแกน QR ที่โต๊ะ สั่งอาหาร สร้าง QR ชำระเงิน และฝั่งร้านเห็นยอดแยกตามร้านกับโต๊ะ</text>
+
+  <rect x="60" y="160" width="1680" height="160" rx="18" fill="#EAF8EF" stroke="#CFE8D6"/>
+  <rect x="60" y="350" width="1680" height="260" rx="18" fill="#FFFFFF" stroke="#DBE4DC"/>
+  <rect x="60" y="640" width="1680" height="160" rx="18" fill="#EEF8F7" stroke="#CBE7E4"/>
+  <rect x="60" y="830" width="1680" height="160" rx="18" fill="#FFF7E8" stroke="#F2DFC0"/>
+
+  <text x="88" y="202" class="lane-title">Customer / LINE MINI APP</text>
+  <text x="88" y="392" class="lane-title">Next.js Demo System</text>
+  <text x="88" y="682" class="lane-title">LINE + Restaurant Dashboard</text>
+  <text x="88" y="872" class="lane-title">Demo Admin Pages</text>
+
+  <g filter="url(#shadow)">
+    <rect x="220" y="214" width="210" height="74" rx="14" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <text x="244" y="248" class="node-title">Scan Table QR</text>
+    <text x="244" y="274" class="node-body">QR ของโต๊ะ A1/A2</text>
+
+    <rect x="510" y="214" width="230" height="74" rx="14" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <text x="534" y="248" class="node-title">Open Mini App</text>
+    <text x="534" y="274" class="node-body">รู้ shopId + tableId</text>
+
+    <rect x="820" y="214" width="220" height="74" rx="14" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <text x="844" y="248" class="node-title">Select Menu</text>
+    <text x="844" y="274" class="node-body">เลือกเมนูและจำนวน</text>
+
+    <rect x="1120" y="214" width="220" height="74" rx="14" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <text x="1144" y="248" class="node-title">Submit Order</text>
+    <text x="1144" y="274" class="node-body">ส่งยอดชำระเงิน</text>
+
+    <rect x="1420" y="214" width="230" height="74" rx="14" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <text x="1444" y="248" class="node-title">Payment Page</text>
+    <text x="1444" y="274" class="node-body">QR + Order Summary</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="220" y="430" width="210" height="74" rx="14" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <text x="244" y="464" class="node-title">Create Order</text>
+    <text x="244" y="490" class="node-body">สร้างเลขออเดอร์</text>
+
+    <rect x="510" y="430" width="230" height="74" rx="14" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <text x="534" y="464" class="node-title">Calculate Total</text>
+    <text x="534" y="490" class="node-body">รวมยอดจากเมนู</text>
+
+    <rect x="820" y="430" width="220" height="74" rx="14" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <text x="844" y="464" class="node-title">Generate QR</text>
+    <text x="844" y="490" class="node-body">PromptPay QR</text>
+
+    <rect x="1120" y="430" width="220" height="74" rx="14" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <text x="1144" y="464" class="node-title">Save Status</text>
+    <text x="1144" y="490" class="node-body">รอชำระ / แจ้ง LINE</text>
+
+    <rect x="1420" y="430" width="230" height="74" rx="14" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <text x="1444" y="464" class="node-title">Notify Request</text>
+    <text x="1444" y="490" class="node-body">ส่ง request ไป LINE</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="220" y="704" width="230" height="74" rx="14" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <text x="244" y="738" class="node-title">LINE Push</text>
+    <text x="244" y="764" class="node-body">แจ้งร้าน/โต๊ะ/ยอด</text>
+
+    <rect x="560" y="704" width="240" height="74" rx="14" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <text x="584" y="738" class="node-title">Dashboard</text>
+    <text x="584" y="764" class="node-body">รายการล่าสุด</text>
+
+    <rect x="910" y="704" width="260" height="74" rx="14" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <text x="934" y="738" class="node-title">Shop + Table + Total</text>
+    <text x="934" y="764" class="node-body">เห็นข้อมูลที่ต้องใช้</text>
+
+    <rect x="1280" y="704" width="230" height="74" rx="14" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <text x="1304" y="738" class="node-title">Mark Paid</text>
+    <text x="1304" y="764" class="node-body">เปลี่ยนสถานะชำระแล้ว</text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <rect x="330" y="894" width="290" height="74" rx="14" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <text x="354" y="928" class="node-title">Table QR Management</text>
+    <text x="354" y="954" class="node-body">QR แยกตามโต๊ะ</text>
+
+    <rect x="800" y="894" width="320" height="74" rx="14" fill="#FFFFFF" stroke="#DBE4DC"/>
+    <text x="824" y="928" class="node-title">Menu / Store Management</text>
+    <text x="824" y="954" class="node-body">แก้ร้าน โต๊ะ เมนู ราคา</text>
+  </g>
+
+  <path d="M430 251H506" stroke="#06C755" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow)"/>
+  <path d="M740 251H816" stroke="#06C755" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow)"/>
+  <path d="M1040 251H1116" stroke="#06C755" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow)"/>
+  <path d="M1340 251H1416" stroke="#06C755" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow)"/>
+
+  <path d="M1230 288V348C1230 386 1198 408 1164 408H330C300 408 284 418 284 426" stroke="#06C755" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow)"/>
+  <path d="M430 467H506" stroke="#06C755" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow)"/>
+  <path d="M740 467H816" stroke="#06C755" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow)"/>
+  <path d="M1040 467H1116" stroke="#06C755" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow)"/>
+  <path d="M1340 467H1416" stroke="#06C755" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow)"/>
+
+  <path d="M930 430V320C930 300 950 288 978 288H1420" stroke="#20A7A0" stroke-width="4" stroke-linecap="round" stroke-dasharray="10 12" marker-end="url(#arrow)"/>
+  <path d="M1535 504V604C1535 654 1492 682 1442 682H342C310 682 292 692 292 700" stroke="#06C755" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow)"/>
+  <path d="M450 741H556" stroke="#06C755" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow)"/>
+  <path d="M800 741H906" stroke="#06C755" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow)"/>
+  <path d="M1170 741H1276" stroke="#06C755" stroke-width="5" stroke-linecap="round" marker-end="url(#arrow)"/>
+
+  <path d="M475 894V825C475 802 452 790 420 790H327C300 790 284 780 284 778" stroke="#F5B83F" stroke-width="4" stroke-linecap="round" stroke-dasharray="10 12" marker-end="url(#arrow)"/>
+  <path d="M960 894V825C960 804 984 790 1018 790H1395" stroke="#F5B83F" stroke-width="4" stroke-linecap="round" stroke-dasharray="10 12" marker-end="url(#arrow)"/>
+
+  <rect x="260" y="1020" width="1280" height="64" rx="18" fill="#EEF7F1" stroke="#D7EBDC"/>
+  <text x="296" y="1059" class="note-strong">Demo note:</text>
+  <text x="426" y="1059" class="note">ผังนี้ใช้สื่อสาร flow และ scope demo ก่อนเชื่อม LINE OA, LIFF, database จริง และ payment verification ใน production</text>
+</svg>

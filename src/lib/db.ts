@@ -3,7 +3,9 @@ import path from "node:path";
 import { seedDatabase } from "./seed";
 import type { Database, Order } from "./types";
 
-const dbPath = path.join(process.cwd(), "data", "db.json");
+const dbPath = process.env.VERCEL
+  ? path.join("/tmp", "line-store-payment-db.json")
+  : path.join(process.cwd(), "data", "db.json");
 
 async function ensureDbFile() {
   await fs.mkdir(path.dirname(dbPath), { recursive: true });
