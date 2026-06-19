@@ -1,4 +1,18 @@
-import { ArrowRight, BellRing, Download, Image as ImageIcon, LayoutDashboard, QrCode, Settings2, Smartphone, Store, WalletCards } from "lucide-react";
+import {
+  ArrowRight,
+  BellRing,
+  CreditCard,
+  Download,
+  Image as ImageIcon,
+  LayoutDashboard,
+  QrCode,
+  Settings2,
+  Smartphone,
+  Store,
+  Table2,
+  UserRound,
+  WalletCards
+} from "lucide-react";
 import Link from "next/link";
 import { readDb } from "@/lib/db";
 import { formatBaht } from "@/lib/money";
@@ -88,6 +102,124 @@ export default async function DemoPage() {
           </span>
           <ArrowRight size={18} />
         </a>
+      </section>
+
+      <section className="value-showcase">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow">Value Proposition</p>
+            <h2>จุดขายที่ลูกค้าและร้านจะได้เห็น</h2>
+          </div>
+        </div>
+
+        <div className="value-columns">
+          <article className="value-panel customer">
+            <div className="value-panel-head">
+              <span className="value-icon">
+                <UserRound size={24} />
+              </span>
+              <div>
+                <p className="eyebrow">Customer Side</p>
+                <h3>ประสบการณ์ฝั่งลูกค้า</h3>
+              </div>
+            </div>
+
+            <div className="value-list">
+              <div>
+                <QrCode size={20} />
+                <span>
+                  <strong>สแกน QR แล้วรู้โต๊ะทันที</strong>
+                  <small>ไม่ต้องให้พนักงานถามโต๊ะซ้ำ ลดความผิดพลาดในการรับออเดอร์</small>
+                </span>
+              </div>
+              <div>
+                <Smartphone size={20} />
+                <span>
+                  <strong>สั่งอาหารจากมือถือใน LINE</strong>
+                  <small>ลูกค้าใช้งานผ่าน LINE MINI APP ไม่ต้องโหลดแอปเพิ่ม</small>
+                </span>
+              </div>
+              <div>
+                <CreditCard size={20} />
+                <span>
+                  <strong>เห็นยอดและ QR ชำระเงินทันที</strong>
+                  <small>สรุปรายการอาหาร โต๊ะ และยอดรวมบนหน้าเดียว</small>
+                </span>
+              </div>
+            </div>
+
+            <Link className="value-cta" href={miniAppUrl}>
+              ลอง flow ลูกค้า
+              <ArrowRight size={18} />
+            </Link>
+          </article>
+
+          <article className="value-panel admin">
+            <div className="value-panel-head">
+              <span className="value-icon">
+                <LayoutDashboard size={24} />
+              </span>
+              <div>
+                <p className="eyebrow">Admin Side</p>
+                <h3>ประสบการณ์ฝั่งร้าน / Admin</h3>
+              </div>
+            </div>
+
+            <div className="value-list">
+              <div>
+                <Table2 size={20} />
+                <span>
+                  <strong>เห็นยอดแยกตามร้านและโต๊ะ</strong>
+                  <small>Dashboard บอกชัดว่าโต๊ะไหนมียอดรอชำระเท่าไร</small>
+                </span>
+              </div>
+              <div>
+                <BellRing size={20} />
+                <span>
+                  <strong>ติดตามสถานะแจ้งเตือน LINE</strong>
+                  <small>รู้ว่าแจ้งเตือนแล้วหรือยัง และกดแจ้งซ้ำได้จากหลังร้าน</small>
+                </span>
+              </div>
+              <div>
+                <Settings2 size={20} />
+                <span>
+                  <strong>มีหน้าเตรียมจัดการร้านและเมนู</strong>
+                  <small>โชว์การแก้โต๊ะ เมนู ราคา สถานะพร้อมขาย สำหรับ production ต่อไป</small>
+                </span>
+              </div>
+            </div>
+
+            <div className="value-cta-group">
+              <Link className="value-cta" href="/dashboard">
+                ดู Dashboard
+                <ArrowRight size={18} />
+              </Link>
+              <Link className="value-cta secondary" href="/management">
+                ดู Management
+                <ArrowRight size={18} />
+              </Link>
+            </div>
+          </article>
+        </div>
+
+        <div className="demo-metrics">
+          <div>
+            <strong>{shop?.tables.length ?? 0}</strong>
+            <span>โต๊ะตัวอย่าง</span>
+          </div>
+          <div>
+            <strong>{shop?.menu.length ?? 0}</strong>
+            <span>เมนูตัวอย่าง</span>
+          </div>
+          <div>
+            <strong>6</strong>
+            <span>หน้าสำหรับ Demo</span>
+          </div>
+          <div>
+            <strong>LINE</strong>
+            <span>พร้อมต่อ LIFF/OA</span>
+          </div>
+        </div>
       </section>
 
       <section className="demo-pages">
