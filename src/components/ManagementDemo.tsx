@@ -32,6 +32,9 @@ export function ManagementDemo({ initialShop }: Props) {
     channelAccessTokenConfigured: boolean;
     channelSecretConfigured: boolean;
     recipientConfigured: boolean;
+    recipientId: string | null;
+    recipientSource: "shop" | "webhook" | "env" | null;
+    recipientPreview: string | null;
   } | null>(null);
   const [lineRecipients, setLineRecipients] = useState<LineRecipient[]>([]);
   const [lineTestMessage, setLineTestMessage] = useState("");
@@ -57,6 +60,9 @@ export function ManagementDemo({ initialShop }: Props) {
       channelAccessTokenConfigured: boolean;
       channelSecretConfigured: boolean;
       recipientConfigured: boolean;
+      recipientId: string | null;
+      recipientSource: "shop" | "webhook" | "env" | null;
+      recipientPreview: string | null;
     };
     setLineStatus(data);
   }
@@ -281,6 +287,14 @@ export function ManagementDemo({ initialShop }: Props) {
                       <small>{recipient.lastMessage ?? "event"} · {new Date(recipient.lastSeenAt).toLocaleString("th-TH")}</small>
                     </button>
                   ))}
+                </div>
+              ) : lineStatus?.recipientId ? (
+                <div className="recipient-list">
+                  <button className="recipient-row" type="button" onClick={() => applyRecipient(lineStatus.recipientId!)}>
+                    <span>{lineStatus.recipientSource === "env" ? "ENV FALLBACK" : "CURRENT"} · พร้อมใช้งาน</span>
+                    <strong>{lineStatus.recipientId}</strong>
+                    <small>กดเพื่อบันทึก ID นี้เข้า store</small>
+                  </button>
                 </div>
               ) : (
                 <p>ยังไม่มี ID เข้ามา ให้ตั้ง Webhook URL ใน LINE แล้วทัก OA อีกครั้ง</p>
