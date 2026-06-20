@@ -27,12 +27,22 @@ export default async function DemoPage() {
   return (
     <main className="app-shell demo-shell">
       <section className="demo-hero">
-        <div>
+        <div className="demo-hero-copy">
           <p className="eyebrow">Client Demo</p>
           <h1>ระบบสั่งอาหารผ่าน LINE MINI APP</h1>
           <p className="hero-subtitle">
             ทดลอง flow ตั้งแต่ลูกค้าสแกน QR ที่โต๊ะ เลือกเมนู สร้าง QR ชำระเงิน และร้านเห็นยอดแยกตามร้านกับโต๊ะบน Dashboard
           </p>
+          <div className="hero-cta-row">
+            <Link className="hero-primary" href={miniAppUrl}>
+              เริ่มลองสั่งอาหาร
+              <ArrowRight size={18} />
+            </Link>
+            <a className="hero-secondary" href="/demo-flow-simple.svg" target="_blank" rel="noreferrer">
+              ดู Flow Diagram
+              <ImageIcon size={18} />
+            </a>
+          </div>
           <div className="hero-meta">
             <span>
               <Store size={15} />
@@ -44,12 +54,41 @@ export default async function DemoPage() {
             </span>
           </div>
         </div>
-        <div className="demo-phone" aria-hidden="true">
-          <div className="phone-top" />
-          <div className="phone-line" />
-          <div className="phone-card" />
-          <div className="phone-card short" />
-          <div className="phone-pay" />
+
+        <div className="demo-showcase" aria-hidden="true">
+          <div className="showcase-card mini">
+            <div className="showcase-bar">
+              <span />
+              <strong>Mini App</strong>
+            </div>
+            <div className="showcase-menu">
+              <span />
+              <div>
+                <strong>ข้าวกะเพราหมู</strong>
+                <small>฿69.00</small>
+              </div>
+            </div>
+            <div className="showcase-menu">
+              <span />
+              <div>
+                <strong>ชาไทย</strong>
+                <small>฿45.00</small>
+              </div>
+            </div>
+            <div className="showcase-pay">ส่งยอดชำระเงิน</div>
+          </div>
+
+          <div className="showcase-card dashboard">
+            <div className="showcase-bar dark">
+              <span />
+              <strong>Dashboard</strong>
+            </div>
+            <div className="showcase-stat">
+              <small>โต๊ะ A1</small>
+              <strong>{formatBaht(sampleTotal)}</strong>
+            </div>
+            <div className="showcase-status">LINE notified</div>
+          </div>
         </div>
       </section>
 

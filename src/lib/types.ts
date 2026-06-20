@@ -40,6 +40,19 @@ export type PaymentNotification = {
 
 export type OrderStatus = "waiting_payment" | "paid" | "cancelled";
 
+export type PaymentProvider = "promptpay_demo" | "omise_promptpay";
+
+export type PaymentGateway = {
+  provider: PaymentProvider;
+  chargeId?: string;
+  sourceId?: string;
+  status?: string;
+  qrImageUrl?: string;
+  expiresAt?: string | null;
+  webhookEventId?: string;
+  lastWebhookAt?: string;
+};
+
 export type Order = {
   id: string;
   shopId: string;
@@ -51,12 +64,25 @@ export type Order = {
   status: OrderStatus;
   paymentPayload: string;
   paymentQrDataUrl: string;
+  paymentProvider?: PaymentProvider;
+  paymentGateway?: PaymentGateway;
   notifications: PaymentNotification[];
   createdAt: string;
   updatedAt: string;
 };
 
+export type LineRecipientType = "user" | "group" | "room";
+
+export type LineRecipient = {
+  id: string;
+  type: LineRecipientType;
+  displayName: string;
+  lastMessage?: string;
+  lastSeenAt: string;
+};
+
 export type Database = {
   shops: Shop[];
   orders: Order[];
+  lineRecipients: LineRecipient[];
 };

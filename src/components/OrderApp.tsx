@@ -1,6 +1,21 @@
 "use client";
 
-import { BellRing, Check, Clock3, MapPin, Minus, Plus, QrCode, ReceiptText, Settings2, ShoppingBag, Sparkles, UserRound } from "lucide-react";
+import {
+  BellRing,
+  Check,
+  Clock3,
+  Download,
+  Expand,
+  MapPin,
+  Minus,
+  Plus,
+  QrCode,
+  ReceiptText,
+  Settings2,
+  ShoppingBag,
+  Sparkles,
+  UserRound
+} from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { formatBaht } from "@/lib/money";
@@ -20,6 +35,7 @@ export function OrderApp() {
   const [lineUserId, setLineUserId] = useState("");
   const [busy, setBusy] = useState(false);
   const [notice, setNotice] = useState("");
+  const [fullScreenQr, setFullScreenQr] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -141,7 +157,7 @@ export function OrderApp() {
   }
 
   return (
-    <main className="app-shell">
+    <main className="app-shell customer-shell">
       <header className="mini-hero">
         <div className="hero-copy">
           <p className="eyebrow">LINE MINI APP</p>
@@ -270,7 +286,7 @@ export function OrderApp() {
           ))}
         </section>
 
-        <aside className="order-panel">
+        <aside className={`order-panel ${order ? "has-payment" : "checkout-card"}`}>
           <div className="order-card-head">
             <div className="panel-title">
               <ShoppingBag size={20} />
@@ -316,7 +332,26 @@ export function OrderApp() {
                 <Check size={14} />
                 {order.status === "paid" ? "ชำระแล้ว" : "รอชำระเงิน"}
               </div>
+              <div className="promptpay-badge">
+                <QrCode size={16} />
+                <span>
+                  <strong>PromptPay</strong>
+                  <small>Thai QR Payment</small>
+                </span>
+              </div>
               <img src={order.paymentQrDataUrl} alt={`QR ${order.id}`} />
+              <p className="qr-helper">สแกนด้วยแอปธนาคารเพื่อชำระเงิน</p>
+              <p className="qr-instruction">บนมือถือให้แคปหน้าจอหรือบันทึก QR แล้วเปิดแอปธนาคาร เลือกสแกนจากรูปภาพ</p>
+              <div className="qr-actions">
+                <button type="button" className="icon-text-button" onClick={() => setFullScreenQr(true)}>
+                  <Expand size={18} />
+                  เปิด QR เต็มจอ
+                </button>
+                <a className="icon-text-button" href={order.paymentQrDataUrl} download={`${order.id}-promptpay-qr.png`}>
+                  <Download size={18} />
+                  บันทึก QR
+                </a>
+              </div>
               <Link className="text-link" href={`/payment/${order.id}`}>
                 เปิดหน้า QR
               </Link>
@@ -324,6 +359,43 @@ export function OrderApp() {
           ) : null}
         </aside>
       </div>
+
+      {order && fullScreenQr ? (
+        <div className="qr-modal" role="dialog" aria-modal="true" aria-label="PromptPay QR เต็มจอ">
+          <div className="qr-modal-panel">
+            <button type="button" className="qr-modal-close" onClick={() => setFullScreenQr(false)}>
+              ปิด
+            </button>
+            <div className="promptpay-badge large">
+              <QrCode size={18} />
+              <span>
+                <strong>PromptPay</strong>
+                <small>Thai QR Payment</small>
+              </span>
+            </div>
+            <img src={order.paymentQrDataUrl} alt={`PromptPay QR ${order.id}`} />
+            <strong>{formatBaht(order.total)}</strong>
+            <p>แคปหน้าจอหรือบันทึก QR แล้วเปิดแอปธนาคารเพื่อสแกนจากรูปภาพ</p>
+            <a className="primary-button" href={order.paymentQrDataUrl} download={`${order.id}-promptpay-qr.png`}>
+              <Download size={18} />
+              บันทึก QR
+            </a>
+          </div>
+        </div>
+      ) : null}
+
+      {!order && itemCount > 0 ? (
+        <div className="mobile-checkout-bar">
+          <div>
+            <span>{itemCount} รายการ</span>
+            <strong>{formatBaht(total)}</strong>
+          </div>
+          <button type="button" disabled={busy} onClick={submitOrder}>
+            <BellRing size={18} />
+            ชำระเงิน
+          </button>
+        </div>
+      ) : null}
     </main>
   );
 }

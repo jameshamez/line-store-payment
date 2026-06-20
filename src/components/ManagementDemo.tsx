@@ -1,10 +1,10 @@
 "use client";
 
-import { ArrowRight, Check, LayoutDashboard, Plus, QrCode, Save, Store, Trash2, Utensils } from "lucide-react";
+import { ArrowRight, BellRing, Check, Copy, LayoutDashboard, Plus, QrCode, RefreshCw, Save, Store, Trash2, Utensils } from "lucide-react";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { formatBaht } from "@/lib/money";
-import type { MenuItem, Shop, Table } from "@/lib/types";
+import type { LineRecipient, MenuItem, Shop, Table } from "@/lib/types";
 
 type Props = {
   initialShop: Shop | undefined;
@@ -15,7 +15,7 @@ export function ManagementDemo({ initialShop }: Props) {
     id: "demo-shop",
     name: "Demo Restaurant",
     branch: "Main Branch",
-    promptPayId: "0812345678",
+    promptPayId: "0615286889",
     lineRecipientId: "",
     tables: [{ id: "A1", name: "โต๊ะ A1" }],
     menu: []
@@ -24,12 +24,48 @@ export function ManagementDemo({ initialShop }: Props) {
   const [shop, setShop] = useState<Shop>(initialShop ?? fallbackShop);
   const [selectedCategory, setSelectedCategory] = useState("ทั้งหมด");
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [lineStatus, setLineStatus] = useState<{
+    ready: boolean;
+    appBaseUrl: string | null;
+    webhookUrl: string | null;
+    channelAccessTokenConfigured: boolean;
+    channelSecretConfigured: boolean;
+    recipientConfigured: boolean;
+  } | null>(null);
+  const [lineRecipients, setLineRecipients] = useState<LineRecipient[]>([]);
+  const [lineTestMessage, setLineTestMessage] = useState("");
 
   const categories = useMemo(() => {
     return ["ทั้งหมด", ...Array.from(new Set(shop.menu.map((item) => item.category)))];
   }, [shop.menu]);
 
   const filteredMenu = selectedCategory === "ทั้งหมด" ? shop.menu : shop.menu.filter((item) => item.category === selectedCategory);
+
+  useEffect(() => {
+    loadLineStatus();
+    loadLineRecipients();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [shop.id]);
+
+  async function loadLineStatus() {
+    const response = await fetch(`/api/line/status?shopId=${shop.id}`);
+    const data = (await response.json()) as {
+      ready: boolean;
+      appBaseUrl: string | null;
+      webhookUrl: string | null;
+      channelAccessTokenConfigured: boolean;
+      channelSecretConfigured: boolean;
+      recipientConfigured: boolean;
+    };
+    setLineStatus(data);
+  }
+
+  async function loadLineRecipients() {
+    const response = await fetch("/api/line/recipients");
+    const data = (await response.json()) as { recipients?: LineRecipient[] };
+    setLineRecipients(data.recipients ?? []);
+  }
 
   function updateShopField(field: keyof Pick<Shop, "name" | "branch" | "promptPayId" | "lineRecipientId">, value: string) {
     setSaved(false);
@@ -85,9 +121,60 @@ export function ManagementDemo({ initialShop }: Props) {
     }));
   }
 
-  function saveDemo() {
-    setSaved(true);
-    window.setTimeout(() => setSaved(false), 2200);
+  async function saveDemo() {
+    setSaving(true);
+    setLineTestMessage("");
+
+    try {
+      const response = await fetch(`/api/shops/${shop.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(shop)
+      });
+
+      const data = (await response.json()) as { shop?: Shop; error?: string };
+
+      if (!response.ok || !data.shop) {
+        throw new Error(data.error ?? "Save shop failed");
+      }
+
+      setShop(data.shop);
+      setSaved(true);
+      await loadLineStatus();
+      window.setTimeout(() => setSaved(false), 2200);
+    } catch (error) {
+      setLineTestMessage(error instanceof Error ? error.message : "บันทึกไม่สำเร็จ");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  async function testLineNotification() {
+    setLineTestMessage("กำลังส่งทดสอบ...");
+
+    const response = await fetch("/api/line/test", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ shopId: shop.id })
+    });
+    const data = (await response.json()) as { ok?: boolean; requestId?: string; error?: string };
+
+    setLineTestMessage(data.ok ? `ส่ง LINE สำเร็จ${data.requestId ? ` (${data.requestId})` : ""}` : data.error ?? "ส่ง LINE ไม่สำเร็จ");
+    await loadLineStatus();
+  }
+
+  async function copyWebhookUrl() {
+    if (!lineStatus?.webhookUrl) {
+      return;
+    }
+
+    await navigator.clipboard.writeText(lineStatus.webhookUrl);
+    setLineTestMessage("คัดลอก Webhook URL แล้ว");
+  }
+
+  function applyRecipient(recipientId: string) {
+    updateShopField("lineRecipientId", recipientId);
+    setLineTestMessage("เลือก Recipient ID แล้ว กดบันทึกลง DB ก่อนทดสอบส่ง LINE");
   }
 
   return (
@@ -140,11 +227,58 @@ export function ManagementDemo({ initialShop }: Props) {
             <label>
               LINE Recipient ID
               <input
-                placeholder="ใส่ userId/groupId ตอนใช้งานจริง"
+                placeholder="U... หรือ C... ห้องที่ร้านต้องการรับแจ้งเตือน"
                 value={shop.lineRecipientId}
                 onChange={(event) => updateShopField("lineRecipientId", event.target.value)}
               />
             </label>
+          </div>
+
+          <div className="line-config-card">
+            <div>
+              <p className="eyebrow">LINE Notify</p>
+              <h3>{lineStatus?.ready ? "พร้อมแจ้งเตือนร้าน" : "ยังตั้งค่าไม่ครบ"}</h3>
+              <p>
+                Token: {lineStatus?.channelAccessTokenConfigured ? "พร้อม" : "ยังไม่มี"} · Secret: {lineStatus?.channelSecretConfigured ? "พร้อม" : "ยังไม่มี"} ·
+                Recipient: {lineStatus?.recipientConfigured ? "พร้อม" : "ยังไม่มี"}
+              </p>
+            </div>
+            <div className="webhook-box">
+              <span>Webhook URL สำหรับ LINE</span>
+              <code>{lineStatus?.webhookUrl ?? "ตั้งค่า APP_BASE_URL ก่อน"}</code>
+              <button className="icon-text-button" type="button" disabled={!lineStatus?.webhookUrl} onClick={copyWebhookUrl}>
+                <Copy size={16} />
+                Copy
+              </button>
+            </div>
+            <div className="recipient-picker">
+              <div className="recipient-picker-head">
+                <span>Recipient ล่าสุดจาก Webhook</span>
+                <button className="icon-button" type="button" onClick={loadLineRecipients} aria-label="Refresh LINE recipients">
+                  <RefreshCw size={16} />
+                </button>
+              </div>
+              {lineRecipients.length > 0 ? (
+                <div className="recipient-list">
+                  {lineRecipients.map((recipient) => (
+                    <button key={recipient.id} className="recipient-row" type="button" onClick={() => applyRecipient(recipient.id)}>
+                      <span>
+                        {recipient.type.toUpperCase()} · {recipient.displayName}
+                      </span>
+                      <strong>{recipient.id}</strong>
+                      <small>{recipient.lastMessage ?? "event"} · {new Date(recipient.lastSeenAt).toLocaleString("th-TH")}</small>
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <p>ยังไม่มี ID เข้ามา ให้ตั้ง Webhook URL ใน LINE แล้วทัก OA อีกครั้ง</p>
+              )}
+            </div>
+            <button className="icon-text-button" type="button" onClick={testLineNotification}>
+              <BellRing size={18} />
+              ทดสอบ LINE
+            </button>
+            {lineTestMessage ? <p className="line-test-message">{lineTestMessage}</p> : null}
           </div>
 
           <div className="management-divider" />
@@ -180,9 +314,9 @@ export function ManagementDemo({ initialShop }: Props) {
                 <Plus size={18} />
                 เพิ่มเมนู
               </button>
-              <button className="icon-text-button save-demo" type="button" onClick={saveDemo}>
+              <button className="icon-text-button save-demo" type="button" disabled={saving} onClick={saveDemo}>
                 {saved ? <Check size={18} /> : <Save size={18} />}
-                {saved ? "บันทึกแล้ว" : "บันทึก Demo"}
+                {saving ? "กำลังบันทึก" : saved ? "บันทึกแล้ว" : "บันทึกลง DB"}
               </button>
             </div>
           </div>
@@ -239,7 +373,7 @@ export function ManagementDemo({ initialShop }: Props) {
             ))}
           </div>
 
-          <p className="management-footnote">Demo นี้แก้ข้อมูลบนหน้าจอเพื่อโชว์ UX เท่านั้น ตอนทำ production จะบันทึกลง database และมีสิทธิ์ผู้ใช้งานจริง</p>
+          <p className="management-footnote">หน้านี้บันทึกลง JSON DB ของ demo แล้ว ตอนทำ production จะเปลี่ยนเป็น database จริงและเพิ่มสิทธิ์ผู้ใช้งาน</p>
         </section>
       </section>
     </main>

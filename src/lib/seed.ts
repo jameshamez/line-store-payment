@@ -6,7 +6,7 @@ export const seedDatabase: Database = {
       id: "sathon-kitchen",
       name: "Sathon Kitchen",
       branch: "Sathon",
-      promptPayId: "0812345678",
+      promptPayId: "0615286889",
       lineRecipientId: "",
       tables: [
         { id: "A1", name: "โต๊ะ A1" },
@@ -24,5 +24,6 @@ export const seedDatabase: Database = {
       ]
     }
   ],
-  orders: []
+  orders: [],
+  lineRecipients: []
 };

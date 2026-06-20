@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { makeId, readDb, writeDb } from "@/lib/db";
+import { isOmiseConfigured, createOmisePromptPayCharge } from "@/lib/omise";
 import { createPaymentQr } from "@/lib/payment";
 import type { Order, OrderItem } from "@/lib/types";
 
@@ -70,11 +71,24 @@ export async function POST(request: NextRequest) {
   }
 
   const total = orderItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const { paymentPayload, paymentQrDataUrl } = await createPaymentQr(shop.promptPayId, total);
   const now = new Date().toISOString();
+  const orderId = makeId("ord");
+  const webhookEndpoint = process.env.APP_BASE_URL
+    ? `${process.env.APP_BASE_URL.replace(/\/$/, "")}/api/payments/omise/webhook`
+    : undefined;
+  const useOmise = isOmiseConfigured();
+  const omisePayment = useOmise
+    ? await createOmisePromptPayCharge({
+        orderId,
+        amount: total,
+        description: `${shop.name} ${table.name}`,
+        webhookEndpoint
+      })
+    : null;
+  const demoPayment = useOmise ? null : await createPaymentQr(shop.promptPayId, total);
 
   const order: Order = {
-    id: makeId("ord"),
+    id: orderId,
     shopId: shop.id,
     tableId: table.id,
     customerLineUserId: body.customerLineUserId,
@@ -82,8 +96,21 @@ export async function POST(request: NextRequest) {
     items: orderItems,
     total,
     status: "waiting_payment",
-    paymentPayload,
-    paymentQrDataUrl,
+    paymentPayload: omisePayment?.paymentPayload ?? demoPayment!.paymentPayload,
+    paymentQrDataUrl: omisePayment?.paymentQrDataUrl ?? demoPayment!.paymentQrDataUrl,
+    paymentProvider: useOmise ? "omise_promptpay" : "promptpay_demo",
+    paymentGateway: omisePayment
+      ? {
+          provider: "omise_promptpay",
+          chargeId: omisePayment.chargeId,
+          sourceId: omisePayment.sourceId,
+          status: omisePayment.status,
+          qrImageUrl: omisePayment.qrImageUrl,
+          expiresAt: omisePayment.expiresAt
+        }
+      : {
+          provider: "promptpay_demo"
+        },
     notifications: [],
     createdAt: now,
     updatedAt: now

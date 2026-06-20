@@ -20,7 +20,12 @@ async function ensureDbFile() {
 export async function readDb(): Promise<Database> {
   await ensureDbFile();
   const raw = await fs.readFile(dbPath, "utf8");
-  return JSON.parse(raw) as Database;
+  const db = JSON.parse(raw) as Partial<Database>;
+  return {
+    shops: db.shops ?? seedDatabase.shops,
+    orders: db.orders ?? [],
+    lineRecipients: db.lineRecipients ?? []
+  };
 }
 
 export async function writeDb(db: Database) {

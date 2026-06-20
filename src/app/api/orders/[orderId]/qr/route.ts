@@ -13,12 +13,18 @@ export async function GET(_request: NextRequest, context: { params: Params }) {
     return NextResponse.json({ error: "Order not found" }, { status: 404 });
   }
 
-  const base64 = order.paymentQrDataUrl.replace(/^data:image\/png;base64,/, "");
+  const match = order.paymentQrDataUrl.match(/^data:(?<contentType>[^;]+);base64,(?<base64>.+)$/);
+
+  if (!match?.groups) {
+    return NextResponse.json({ error: "Order QR is not a valid data URL" }, { status: 500 });
+  }
+
+  const { contentType, base64 } = match.groups;
   const image = Buffer.from(base64, "base64");
 
   return new NextResponse(image, {
     headers: {
-      "Content-Type": "image/png",
+      "Content-Type": contentType,
       "Cache-Control": "public, max-age=60"
     }
   });

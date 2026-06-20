@@ -7,6 +7,10 @@ type LinePushResponse = {
   error?: string;
 };
 
+export function isLineConfigured(recipientId?: string) {
+  return Boolean(process.env.LINE_CHANNEL_ACCESS_TOKEN && recipientId);
+}
+
 export async function sendLinePaymentNotification({
   order,
   shop,
@@ -31,7 +35,11 @@ export async function sendLinePaymentNotification({
     };
   }
 
-  const result = await pushPaymentMessage({ token, recipientId, order, shop, table });
+  const result = await pushLineMessages({
+    token,
+    recipientId,
+    messages: buildPaymentMessages({ order, shop, table })
+  });
 
   return {
     id: crypto.randomUUID(),
@@ -44,19 +52,37 @@ export async function sendLinePaymentNotification({
   };
 }
 
-async function pushPaymentMessage({
-  token,
-  recipientId,
+export async function sendLineTestMessage({ recipientId, shopName }: { recipientId: string; shopName: string }) {
+  const token = process.env.LINE_CHANNEL_ACCESS_TOKEN;
+
+  if (!token || !recipientId) {
+    return {
+      ok: false,
+      error: "LINE_CHANNEL_ACCESS_TOKEN or recipientId is not configured"
+    };
+  }
+
+  return pushLineMessages({
+    token,
+    recipientId,
+    messages: [
+      {
+        type: "text",
+        text: [`ทดสอบแจ้งเตือน LINE`, `ร้าน: ${shopName}`, `ระบบพร้อมส่งยอดชำระเงินเข้าห้องนี้แล้ว`].join("\n")
+      }
+    ]
+  });
+}
+
+function buildPaymentMessages({
   order,
   shop,
   table
 }: {
-  token: string;
-  recipientId: string;
   order: Order;
   shop: Shop;
   table: Table;
-}): Promise<LinePushResponse> {
+}) {
   const baseUrl = process.env.APP_BASE_URL?.replace(/\/$/, "");
   const paymentUrl = baseUrl ? `${baseUrl}/payment/${order.id}` : undefined;
   const qrUrl = baseUrl ? `${baseUrl}/api/orders/${order.id}/qr` : undefined;
@@ -88,6 +114,18 @@ async function pushPaymentMessage({
     });
   }
 
+  return messages;
+}
+
+async function pushLineMessages({
+  token,
+  recipientId,
+  messages
+}: {
+  token: string;
+  recipientId: string;
+  messages: Array<Record<string, unknown>>;
+}): Promise<LinePushResponse> {
   const response = await fetch("https://api.line.me/v2/bot/message/push", {
     method: "POST",
     headers: {
