@@ -96,6 +96,7 @@ function buildPaymentMessages({
       type: "text",
       text: [
         "แจ้งชำระเงิน",
+        `ออเดอร์: ${order.id}`,
         `ร้าน: ${shop.name} (${shop.branch})`,
         `โต๊ะ: ${table.name}`,
         `ยอดรวม: ${formatBaht(order.total)}`,

@@ -133,11 +133,12 @@ export function OrderApp() {
           tableId: activeTable.id,
           customerLineUserId: lineUserId,
           customerName: lineName,
-          items: cartItems.map((item) => ({ menuItemId: item.id, quantity: item.quantity }))
+          items: cartItems.map((item) => ({ menuItemId: item.id, quantity: item.quantity })),
+          notifyLine: true
         })
       });
 
-      const data = (await response.json()) as { order?: Order; error?: string };
+      const data = (await response.json()) as { order?: Order; notification?: { status: string }; error?: string };
 
       if (!response.ok || !data.order) {
         throw new Error(data.error ?? "Create order failed");
@@ -145,10 +146,7 @@ export function OrderApp() {
 
       setOrder(data.order);
       setCart({});
-
-      const notifyResponse = await fetch(`/api/orders/${data.order.id}/notify`, { method: "POST" });
-      const notifyData = (await notifyResponse.json()) as { notification?: { status: string } };
-      setNotice(notifyData.notification?.status === "sent" ? "ส่ง LINE แล้ว" : "บันทึกแจ้งเตือนแล้ว");
+      setNotice(data.notification?.status === "sent" ? "ส่ง LINE แล้ว" : "บันทึกแจ้งเตือนแล้ว");
     } catch (error) {
       setNotice(error instanceof Error ? error.message : "เกิดข้อผิดพลาด");
     } finally {

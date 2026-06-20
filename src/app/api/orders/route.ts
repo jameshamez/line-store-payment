@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { makeId, readDb, writeDb } from "@/lib/db";
+import { sendLinePaymentNotification } from "@/lib/line";
 import { isOmiseConfigured, createOmisePromptPayCharge } from "@/lib/omise";
 import { createPaymentQr } from "@/lib/payment";
-import type { Order, OrderItem } from "@/lib/types";
+import type { Order, OrderItem, PaymentNotification } from "@/lib/types";
 
 export const runtime = "nodejs";
 
@@ -12,6 +13,7 @@ type CreateOrderBody = {
   customerLineUserId?: string;
   customerName?: string;
   items?: Array<{ menuItemId: string; quantity: number }>;
+  notifyLine?: boolean;
 };
 
 export async function GET(request: NextRequest) {
@@ -87,7 +89,7 @@ export async function POST(request: NextRequest) {
     : null;
   const demoPayment = useOmise ? null : await createPaymentQr(shop.promptPayId, total);
 
-  const order: Order = {
+  let order: Order = {
     id: orderId,
     shopId: shop.id,
     tableId: table.id,
@@ -116,8 +118,24 @@ export async function POST(request: NextRequest) {
     updatedAt: now
   };
 
+  let notification: PaymentNotification | null = null;
+
+  if (body.notifyLine !== false) {
+    const recipientId = shop.lineRecipientId || db.lineRecipients[0]?.id || process.env.LINE_RECIPIENT_ID || "";
+    notification = await sendLinePaymentNotification({
+      order,
+      shop: { ...shop, lineRecipientId: recipientId },
+      table
+    });
+    order = {
+      ...order,
+      notifications: [notification],
+      updatedAt: new Date().toISOString()
+    };
+  }
+
   db.orders.unshift(order);
   await writeDb(db);
 
-  return NextResponse.json({ order }, { status: 201 });
+  return NextResponse.json({ order, notification }, { status: 201 });
 }
