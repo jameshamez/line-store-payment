@@ -20,7 +20,7 @@ export const seedDatabase: Database = {
         { id: "tom-yum", name: "ต้มยำกุ้ง", category: "กับข้าว", price: 159, available: true },
         { id: "omelette", name: "ไข่เจียว", category: "กับข้าว", price: 55, available: true },
         { id: "thai-tea", name: "ชาไทย", category: "เครื่องดื่ม", price: 45, available: true },
-        { id: "water", name: "น้ำเปล่า", category: "เครื่องดื่ม", price: 15, available: true }
+        { id: "water", name: "น้ำเปล่า", category: "เครื่องดื่ม", price: 1, available: true }
       ]
     }
   ],
