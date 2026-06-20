@@ -27,7 +27,12 @@ export async function POST(_request: NextRequest, context: { params: Params }) {
     return NextResponse.json({ error: "Table not found" }, { status: 404 });
   }
 
-  const notification = await sendLinePaymentNotification({ order, shop, table });
+  const recipientId = shop.lineRecipientId || db.lineRecipients[0]?.id || process.env.LINE_RECIPIENT_ID || "";
+  const notification = await sendLinePaymentNotification({
+    order,
+    shop: { ...shop, lineRecipientId: recipientId },
+    table
+  });
   const nextOrder = await updateOrder(order.id, (currentOrder) => ({
     ...currentOrder,
     notifications: [notification, ...currentOrder.notifications],

@@ -13,8 +13,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Shop not found" }, { status: 404 });
   }
 
+  const recipientId = body.recipientId || shop.lineRecipientId || db.lineRecipients[0]?.id || process.env.LINE_RECIPIENT_ID || "";
+
   const result = await sendLineTestMessage({
-    recipientId: body.recipientId ?? shop.lineRecipientId,
+    recipientId,
     shopName: shop.name
   });
 
