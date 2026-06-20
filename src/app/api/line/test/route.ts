@@ -5,7 +5,7 @@ import { sendLineTestMessage } from "@/lib/line";
 export const runtime = "nodejs";
 
 export async function POST(request: NextRequest) {
-  const body = (await request.json()) as { shopId?: string };
+  const body = (await request.json()) as { shopId?: string; recipientId?: string };
   const db = await readDb();
   const shop = db.shops.find((candidate) => candidate.id === body.shopId) ?? db.shops[0];
 
@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
   }
 
   const result = await sendLineTestMessage({
-    recipientId: shop.lineRecipientId,
+    recipientId: body.recipientId ?? shop.lineRecipientId,
     shopName: shop.name
   });
 

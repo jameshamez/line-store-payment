@@ -121,15 +121,14 @@ export function ManagementDemo({ initialShop }: Props) {
     }));
   }
 
-  async function saveDemo() {
+  async function saveShop(nextShop: Shop, successMessage?: string) {
     setSaving(true);
-    setLineTestMessage("");
 
     try {
-      const response = await fetch(`/api/shops/${shop.id}`, {
+      const response = await fetch(`/api/shops/${nextShop.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(shop)
+        body: JSON.stringify(nextShop)
       });
 
       const data = (await response.json()) as { shop?: Shop; error?: string };
@@ -140,13 +139,23 @@ export function ManagementDemo({ initialShop }: Props) {
 
       setShop(data.shop);
       setSaved(true);
+      if (successMessage) {
+        setLineTestMessage(successMessage);
+      }
       await loadLineStatus();
       window.setTimeout(() => setSaved(false), 2200);
+      return data.shop;
     } catch (error) {
       setLineTestMessage(error instanceof Error ? error.message : "บันทึกไม่สำเร็จ");
+      return null;
     } finally {
       setSaving(false);
     }
+  }
+
+  async function saveDemo() {
+    setLineTestMessage("");
+    await saveShop(shop);
   }
 
   async function testLineNotification() {
@@ -155,7 +164,7 @@ export function ManagementDemo({ initialShop }: Props) {
     const response = await fetch("/api/line/test", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ shopId: shop.id })
+      body: JSON.stringify({ shopId: shop.id, recipientId: shop.lineRecipientId })
     });
     const data = (await response.json()) as { ok?: boolean; requestId?: string; error?: string };
 
@@ -172,9 +181,12 @@ export function ManagementDemo({ initialShop }: Props) {
     setLineTestMessage("คัดลอก Webhook URL แล้ว");
   }
 
-  function applyRecipient(recipientId: string) {
-    updateShopField("lineRecipientId", recipientId);
-    setLineTestMessage("เลือก Recipient ID แล้ว กดบันทึกลง DB ก่อนทดสอบส่ง LINE");
+  async function applyRecipient(recipientId: string) {
+    const nextShop = { ...shop, lineRecipientId: recipientId };
+    setSaved(false);
+    setShop(nextShop);
+    setLineTestMessage("กำลังบันทึก Recipient ID...");
+    await saveShop(nextShop, "บันทึก Recipient ID แล้ว กดทดสอบ LINE ได้เลย");
   }
 
   return (
